@@ -1,8 +1,10 @@
 package br.pro.aguiar.dka
 
 import android.content.Context
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
 import java.io.File
@@ -26,10 +28,7 @@ class MainActivity : AppCompatActivity() {
 
             if (arquivo.canRead()) {
                 textViewFileLegivel.text = "Sim"
-                var fileReader = FileReader(arquivo)
-                var bufferedReader = BufferedReader(fileReader)
-                var conteudo = bufferedReader.readText()
-                editTextTextMultiLine.setText(conteudo)
+                ReaderFileAsyncTask().execute(arquivo)
             } else
                 textViewFileLegivel.text = "Não"
 
@@ -38,13 +37,9 @@ class MainActivity : AppCompatActivity() {
             else
                 enableComponents(false)
         }
-
         btnSalveFile.setOnClickListener {
             var conteudo = editTextTextMultiLine.text.toString()
-            var arquivo = editFileName.text.toString()
-            openFileOutput(arquivo, Context.MODE_PRIVATE).use {
-                it.write(conteudo.toByteArray())
-            }
+            WriterFileAsyncTask().execute(conteudo)
         }
     }
 
@@ -52,4 +47,43 @@ class MainActivity : AppCompatActivity() {
         editTextTextMultiLine.isEnabled = bool
         btnSalveFile.isEnabled = bool
     }
+
+    inner class WriterFileAsyncTask: AsyncTask<String, Unit, Unit>() {
+        override fun doInBackground(vararg conteudos: String?) {
+            var arquivo = editFileName.text.toString()
+            openFileOutput(arquivo, Context.MODE_PRIVATE).use {
+                conteudos.forEach {msg ->
+                    it.write(msg?.toByteArray())
+                }
+            }
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            super.onPostExecute(result)
+            Toast.makeText(
+                this@MainActivity, "Conteúdo armazenado com sucesso.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+    }
+
+    inner class ReaderFileAsyncTask: AsyncTask<File, Unit, String>() {
+        override fun doInBackground(vararg files: File?): String {
+            var fileReader = FileReader(files[0])
+            var bufferedReader = BufferedReader(fileReader)
+            var conteudo = bufferedReader.readText()
+            return conteudo
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            editTextTextMultiLine.setText(result)
+            Toast.makeText(
+                this@MainActivity, "Conteúdo lido com sucesso.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
 }
