@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.BufferedReader
 import java.io.File
+import java.io.FileReader
 
 
 class MainActivity : AppCompatActivity() {
@@ -13,29 +15,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // editFileName
-        // btnValidateFile
-        // textViewFileExiste
-        // textViewFileLegivel
-        // editTextTextMultiLine
-        // btnSalveFile
-        // File
-
         btnValidateFile.setOnClickListener {
             var nomeArquivo = editFileName.text.toString()
-            var file = File(filesDir, nomeArquivo)
+            var arquivo = File(filesDir, nomeArquivo)
 
-            if (file.exists()){
+            if (arquivo.exists()){
                 textViewFileExiste.text = "Sim"
             } else
                 textViewFileExiste.text = "Não"
 
-            if (file.canRead())
+            if (arquivo.canRead()) {
                 textViewFileLegivel.text = "Sim"
-            else
+                var fileReader = FileReader(arquivo)
+                var bufferedReader = BufferedReader(fileReader)
+                var conteudo = bufferedReader.readText()
+                editTextTextMultiLine.setText(conteudo)
+            } else
                 textViewFileLegivel.text = "Não"
 
-            if (file.canWrite())
+            if (arquivo.canWrite())
                 enableComponents(true)
             else
                 enableComponents(false)
