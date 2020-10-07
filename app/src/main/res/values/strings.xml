@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DKA</string>
+    <string name="hintFileName">Nome do Arquivo</string>
+    <string name="btnValidateFile">Validar</string>
 </resources>
