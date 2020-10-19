@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/livroListaFragment">
+
+    <fragment
+        android:id="@+id/livroListaFragment"
+        android:name="br.pro.aguiar.dka.ui.livro.lista.LivroListaFragment"
+        android:label="livro_lista_fragment"
+        tools:layout="@layout/livro_lista_fragment" />
+    <fragment
+        android:id="@+id/livroFormFragment"
+        android:name="br.pro.aguiar.dka.ui.livro.form.LivroFormFragment"
+        android:label="livro_form_fragment"
+        tools:layout="@layout/livro_form_fragment" />
+</navigation>
