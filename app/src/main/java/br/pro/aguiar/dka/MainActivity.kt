@@ -1,10 +1,12 @@
 package br.pro.aguiar.dka
 
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
 
@@ -19,6 +21,22 @@ class MainActivity : AppCompatActivity() {
         mStorageRef = FirebaseStorage.getInstance()
                         .getReference()
 
+        var arquivoStorage = mStorageRef
+            .child("AguiarPixels.png")
+
+        var task = arquivoStorage
+            .getBytes(1024*1024)
+
+        task.addOnSuccessListener {
+            Log.i("FirebaseStorage", "Arquivo baixado com sucesso!")
+            var bitmap = BitmapFactory
+                .decodeByteArray(it, 0, it.size)
+            imageViewStorage.setImageBitmap(bitmap)
+        }.addOnFailureListener {
+            Log.i("FirebaseStorage", "Download falhou: ${it.message}")
+        }
+
+        /*
         var fileStorage
                 = File(filesDir, "imgStorage.png")
 
@@ -33,6 +51,8 @@ class MainActivity : AppCompatActivity() {
         }.addOnFailureListener {
             Log.i("FirebaseStorage", "Download falhou: ${it.message}")
         }
+
+         */
 
 
     }
