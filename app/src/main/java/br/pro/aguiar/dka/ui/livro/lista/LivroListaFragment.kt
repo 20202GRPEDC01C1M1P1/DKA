@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.livro_lista_fragment.*
 class LivroListaFragment : Fragment() {
     private lateinit var viewModel: LivroListaViewModel
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,13 +34,7 @@ class LivroListaFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(LivroListaViewModel::class.java)
 
         val db = AppDatabase.getInstance(requireActivity().applicationContext)
-//        LivroListaAsync().execute(db)
-
-        listViewLivros.adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            viewModel.all(db)
-        )
+        LivroListaAsync().execute(db)
 
         fabForm.setOnClickListener {
             findNavController().navigate(R.id.livroFormFragment)

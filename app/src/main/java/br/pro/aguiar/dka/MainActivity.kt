@@ -1,18 +1,43 @@
 package br.pro.aguiar.dka
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import kotlinx.android.synthetic.main.activity_main.*
+import android.util.Log
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var mStorageRef: StorageReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        mStorageRef = FirebaseStorage.getInstance()
+                        .getReference()
+
+        var fileStorage
+                = File(filesDir, "imgStorage.png")
+
+        var arquivoStorage = mStorageRef
+            .child("AguiarPixels.png")
+
+        var task = arquivoStorage
+            .getFile(fileStorage)
+
+        task.addOnSuccessListener {
+            Log.i("FirebaseStorage", "Arquivo baixado com sucesso!")
+        }.addOnFailureListener {
+            Log.i("FirebaseStorage", "Download falhou: ${it.message}")
+        }
+
+
     }
 
+    /*
 //    fun actionBtnClick(view: View) {
 //        var type: Int
 //        when (view.id){
@@ -27,4 +52,6 @@ class MainActivity : AppCompatActivity() {
 //            startActivity(it)
 //        }
 //    }
+
+     */
 }
