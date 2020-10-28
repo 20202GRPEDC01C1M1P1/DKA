@@ -4,6 +4,8 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.core.net.toUri
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,8 +24,26 @@ class MainActivity : AppCompatActivity() {
                         .getReference()
 
         var arquivoStorage = mStorageRef
-            .child("AguiarPixels.png")
+            .child("aguiar/anotacoes.txt")
 
+        var task = arquivoStorage.putFile(
+            File(filesDir, "exemplo.txt").toUri()
+        )
+
+        task.addOnCompleteListener {
+            if (it.isSuccessful){
+                Toast.makeText(this,
+                "Upload realizado com sucesso!",
+                Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this,
+                    "${it.exception?.message}",
+                    Toast.LENGTH_LONG).show()
+            }
+        }
+
+        // Upload
+        /*
         var task = arquivoStorage
             .getBytes(1024*1024)
 
@@ -36,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             Log.i("FirebaseStorage", "Download falhou: ${it.message}")
         }
 
+         */
         /*
         var fileStorage
                 = File(filesDir, "imgStorage.png")
