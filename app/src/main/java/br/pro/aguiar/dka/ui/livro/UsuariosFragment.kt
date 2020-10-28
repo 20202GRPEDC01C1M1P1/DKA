@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import br.pro.aguiar.dka.R
+import br.pro.aguiar.dka.model.User
+import com.google.firebase.firestore.FirebaseFirestore
 
 class UsuariosFragment : Fragment() {
 
@@ -23,6 +26,34 @@ class UsuariosFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(UsuariosViewModel::class.java)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        var usuario = User("Thiago Aguiar", 45)
+
+        var db = FirebaseFirestore.getInstance()
+
+        var task = db
+            .collection("users")
+            .document("thi@go.br")
+            .set(usuario)
+
+        task.addOnSuccessListener {
+            Toast.makeText(
+                requireContext(),
+                "Usuário persistido com Sucesso.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+            .addOnFailureListener {
+            Toast.makeText(
+                requireContext(),
+                it.message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
 }
