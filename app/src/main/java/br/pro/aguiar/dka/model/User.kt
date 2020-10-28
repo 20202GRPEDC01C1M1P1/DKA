@@ -8,6 +8,6 @@ class User (
     @DocumentId var id: String? = null
 ) {
     override fun toString(): String {
-        return "$id: $name $age"
+        return "$id"
     }
 }

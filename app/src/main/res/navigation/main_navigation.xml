@@ -20,4 +20,9 @@
         android:name="br.pro.aguiar.dka.ui.livro.UsuariosFragment"
         android:label="usuarios_fragment"
         tools:layout="@layout/usuarios_fragment" />
+    <fragment
+        android:id="@+id/usuarioFragment"
+        android:name="br.pro.aguiar.dka.UsuarioFragment"
+        android:label="usuario_fragment"
+        tools:layout="@layout/usuario_fragment" />
 </navigation>
