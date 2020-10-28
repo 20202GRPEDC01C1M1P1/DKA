@@ -18,23 +18,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mStorageRef = FirebaseStorage.getInstance()
-                        .getReference()
-
-        var arquivoStorage = mStorageRef
-            .child("AguiarPixels.png")
-
-        var task = arquivoStorage
-            .getBytes(1024*1024)
-
-        task.addOnSuccessListener {
-            Log.i("FirebaseStorage", "Arquivo baixado com sucesso!")
-            var bitmap = BitmapFactory
-                .decodeByteArray(it, 0, it.size)
-            imageViewStorage.setImageBitmap(bitmap)
-        }.addOnFailureListener {
-            Log.i("FirebaseStorage", "Download falhou: ${it.message}")
-        }
+//        mStorageRef = FirebaseStorage.getInstance()
+//                        .getReference()
+//
+//        var arquivoStorage = mStorageRef
+//            .child("AguiarPixels.png")
+//
+//        var task = arquivoStorage
+//            .getBytes(1024*1024)
+//
+//        task.addOnSuccessListener {
+//            Log.i("FirebaseStorage", "Arquivo baixado com sucesso!")
+//            var bitmap = BitmapFactory
+//                .decodeByteArray(it, 0, it.size)
+//            imageViewStorage.setImageBitmap(bitmap)
+//        }.addOnFailureListener {
+//            Log.i("FirebaseStorage", "Download falhou: ${it.message}")
+//        }
 
         /*
         var fileStorage

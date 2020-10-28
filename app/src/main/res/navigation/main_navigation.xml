@@ -15,4 +15,9 @@
         android:name="br.pro.aguiar.dka.ui.livro.form.LivroFormFragment"
         android:label="livro_form_fragment"
         tools:layout="@layout/livro_form_fragment" />
+    <fragment
+        android:id="@+id/usuariosFragment"
+        android:name="br.pro.aguiar.dka.ui.livro.UsuariosFragment"
+        android:label="usuarios_fragment"
+        tools:layout="@layout/usuarios_fragment" />
 </navigation>

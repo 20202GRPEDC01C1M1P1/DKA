@@ -39,6 +39,10 @@ class LivroListaFragment : Fragment() {
         fabForm.setOnClickListener {
             findNavController().navigate(R.id.livroFormFragment)
         }
+
+        fabUsuarios.setOnClickListener {
+            findNavController().navigate(R.id.usuariosFragment)
+        }
     }
 
     inner class LivroListaAsync
