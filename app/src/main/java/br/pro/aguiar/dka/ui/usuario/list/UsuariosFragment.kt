@@ -1,24 +1,25 @@
-package br.pro.aguiar.dka.ui.livro
+package br.pro.aguiar.dka.ui.usuario.list
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import br.pro.aguiar.dka.R
+import br.pro.aguiar.dka.UsuarioViewModel
 import br.pro.aguiar.dka.model.User
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.usuarios_fragment.*
 
 class UsuariosFragment : Fragment() {
 
 
     private lateinit var viewModel: UsuariosViewModel
+    private lateinit var usuarioViewModel: UsuarioViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +31,14 @@ class UsuariosFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        activity?.let{
+            usuarioViewModel = ViewModelProviders.of(it).get(UsuarioViewModel::class.java)
+        }
+
+        fabUsuarioCadastro.setOnClickListener {
+            usuarioViewModel.usuario = null
+            findNavController().navigate(R.id.usuarioCadastroFragment)
+        }
 
         viewModel = ViewModelProviders.of(this).get(UsuariosViewModel::class.java)
         viewModel
@@ -45,12 +54,8 @@ class UsuariosFragment : Fragment() {
                         )
                     listViewUsuariosLista.setOnItemClickListener { adapterView, view, i, l ->
                         var user = listaUsuarios[i]
-                        Snackbar.make(
-                            frameLayout4,
-                            "Usuário: ${user.name}\nIdade: ${user.age}",
-                            Snackbar.LENGTH_LONG
-                        ).show()
-//                        findNavController().navigate(R.id.usuarioFragment)
+                        usuarioViewModel.usuario = user
+                        findNavController().navigate(R.id.usuarioCadastroFragment)
                     }
 
                 }
@@ -63,12 +68,14 @@ class UsuariosFragment : Fragment() {
                 }
             }
             .addOnFailureListener {
+                Log.e("FirestoreIndex", it.message.toString())
                 Snackbar.make(
                     frameLayout4,
                     it.message.toString(),
                     Snackbar.LENGTH_LONG
                 ).show()
-            }.addOnCompleteListener {
+            }
+            .addOnCompleteListener {
                 progressBarUsuariosLista.visibility = View.GONE
             }
     }

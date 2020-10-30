@@ -17,7 +17,7 @@
         tools:layout="@layout/livro_form_fragment" />
     <fragment
         android:id="@+id/usuariosFragment"
-        android:name="br.pro.aguiar.dka.ui.livro.UsuariosFragment"
+        android:name="br.pro.aguiar.dka.ui.usuario.list.UsuariosFragment"
         android:label="usuarios_fragment"
         tools:layout="@layout/usuarios_fragment" />
     <fragment
@@ -25,4 +25,9 @@
         android:name="br.pro.aguiar.dka.UsuarioFragment"
         android:label="usuario_fragment"
         tools:layout="@layout/usuario_fragment" />
+    <fragment
+        android:id="@+id/usuarioCadastroFragment"
+        android:name="br.pro.aguiar.dka.ui.usuario.form.UsuarioCadastroFragment"
+        android:label="usuario_cadastro_fragment"
+        tools:layout="@layout/usuario_cadastro_fragment" />
 </navigation>

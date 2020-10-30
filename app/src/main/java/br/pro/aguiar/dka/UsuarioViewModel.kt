@@ -1,7 +1,8 @@
 package br.pro.aguiar.dka
 
 import androidx.lifecycle.ViewModel
+import br.pro.aguiar.dka.model.User
 
 class UsuarioViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+    var usuario: User? = null
 }
