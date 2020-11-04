@@ -7,6 +7,9 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CreatePostViewModel : ViewModel() {
+    var db = FirebaseFirestore.getInstance()
+    var collection = db.collection("posts")
+
     fun store(
         titulo: String,
         conteudo: String
@@ -14,9 +17,18 @@ class CreatePostViewModel : ViewModel() {
         var post = Post(
             titulo, conteudo, "Aguiar"
         )
-        var db = FirebaseFirestore.getInstance()
-        var collection = db.collection("posts")
         var task = collection.add(post)
         return task
+    }
+
+    fun update(
+        titulo: String,
+        conteudo: String,
+        postId: String): Task<Void> {
+            var post = Post(
+                titulo, conteudo, "Aguiar"
+            )
+            var task = collection.document(postId).set(post)
+            return task
     }
 }

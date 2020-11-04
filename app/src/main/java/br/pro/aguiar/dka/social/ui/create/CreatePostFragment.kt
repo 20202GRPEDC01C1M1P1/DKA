@@ -5,21 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import br.pro.aguiar.dka.R
+import br.pro.aguiar.dka.social.viewmodel.SocialViewModel
+import br.pro.aguiar.dka.social.viewmodel.SocialViewModelFactory
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.DocumentReference
 import kotlinx.android.synthetic.main.activity_social.*
 import kotlinx.android.synthetic.main.create_post_fragment.*
 import kotlinx.android.synthetic.main.dashboar_fragment.*
+import java.lang.Exception
 
 class CreatePostFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = CreatePostFragment()
-    }
-
     private lateinit var viewModel: CreatePostViewModel
+    private lateinit var socialViewModel: SocialViewModel
+    private lateinit var socialViewModelFactory: SocialViewModelFactory
+    private var postId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,22 +35,52 @@ class CreatePostFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.let {
+            socialViewModelFactory = SocialViewModelFactory()
+            socialViewModel = ViewModelProvider(it, socialViewModelFactory)
+                .get(SocialViewModel::class.java)
+            var post = socialViewModel.post
+            if (post != null){
+                postId = post.id
+                editTextCreatePostTitulo.setText(post.titulo)
+                editTextCreatePostConteudo.setText(post.conteudo)
+            }
+        }
         viewModel = ViewModelProviders.of(this).get(CreatePostViewModel::class.java)
 
         fabPostSave.setOnClickListener {
             var titulo = editTextCreatePostTitulo.text.toString()
             var conteudo = editTextCreatePostConteudo.text.toString()
-            viewModel.store(
-                titulo, conteudo
-            )
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        showSnackbar("Post criado com sucesso.")
-                        findNavController().popBackStack()
-                    } else {
-                        showSnackbar(it.exception?.message.toString())
+            if (postId == null) {
+                viewModel.store(
+                    titulo, conteudo)
+                    .addOnCompleteListener {
+                        actionCompleteListener(
+                            it.isSuccessful,
+                            "Post criado com sucesso.",
+                            it.exception)
                     }
-                }
+            } else {
+                viewModel.update(
+                    titulo, conteudo, postId!!)
+                    .addOnCompleteListener {
+                        actionCompleteListener(it.isSuccessful,
+                            "Post atualizado com sucesso.",
+                            it.exception)
+                    }
+            }
+        }
+    }
+
+    private fun actionCompleteListener(
+        isSuccessful: Boolean,
+        msg: String,
+        exception: Exception?) {
+        if (isSuccessful) {
+            showSnackbar(msg)
+            findNavController().popBackStack()
+        } else {
+            showSnackbar(exception?.message.toString())
         }
     }
 
