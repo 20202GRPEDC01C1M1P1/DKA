@@ -10,4 +10,9 @@
         android:name="br.pro.aguiar.dka.social.ui.dashboard.DashboardFragment"
         android:label="dashboar_fragment"
         tools:layout="@layout/dashboar_fragment" />
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="br.pro.aguiar.dka.social.ui.create.CreatePostFragment"
+        android:label="create_post_fragment"
+        tools:layout="@layout/create_post_fragment" />
 </navigation>
