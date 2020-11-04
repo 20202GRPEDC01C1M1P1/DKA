@@ -55,10 +55,9 @@ class DashboardFragment : Fragment() {
 //                        socialViewModel.post = it
 //                        findNavController().navigate(R.id.createPostFragment)
                     }
-                    var itemTouchHelper = ItemTouchHelper(
+                    var itemTouchHelperDelete = ItemTouchHelper(
                         object : ItemTouchHelper.SimpleCallback(
-                            0,
-                            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                            0, ItemTouchHelper.LEFT
                         ){
                             override fun onMove(
                                 recyclerView: RecyclerView,
@@ -77,7 +76,31 @@ class DashboardFragment : Fragment() {
                             }
                         }
                     )
-                    itemTouchHelper.attachToRecyclerView(recyclerPosts)
+                    itemTouchHelperDelete.attachToRecyclerView(recyclerPosts)
+
+                    var itemTouchHelperShow = ItemTouchHelper(
+                        object : ItemTouchHelper.SimpleCallback(
+                            0, ItemTouchHelper.RIGHT
+                        ){
+                            override fun onMove(
+                                recyclerView: RecyclerView,
+                                viewHolder: RecyclerView.ViewHolder,
+                                target: RecyclerView.ViewHolder
+                            ): Boolean = false
+
+                            override fun onSwiped(
+                                viewHolder: RecyclerView.ViewHolder,
+                                direction: Int
+                            ) {
+                                val position = viewHolder.adapterPosition
+                                val post = posts[position]
+                                socialViewModel.post = post
+                                findNavController().navigate(R.id.createPostFragment)
+                            }
+                        }
+                    )
+                    itemTouchHelperShow.attachToRecyclerView(recyclerPosts)
+
                     recyclerPosts.adapter = postRecyclerAdapter
                     recyclerPosts.layoutManager = LinearLayoutManager(requireContext())
                 } else {
