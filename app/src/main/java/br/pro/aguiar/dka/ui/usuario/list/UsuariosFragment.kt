@@ -43,41 +43,75 @@ class UsuariosFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(UsuariosViewModel::class.java)
         viewModel
             .all()
-            .addOnSuccessListener {
-                var listaUsuarios = it.toObjects(User::class.java)
-                if (!listaUsuarios.isNullOrEmpty()) {
-                    listViewUsuariosLista.adapter =
-                        ArrayAdapter(
-                            requireContext(),
-                            android.R.layout.simple_list_item_1,
-                            it.toObjects(User::class.java)
-                        )
-                    listViewUsuariosLista.setOnItemClickListener { adapterView, view, i, l ->
-                        var user = listaUsuarios[i]
-                        usuarioViewModel.usuario = user
-                        findNavController().navigate(R.id.usuarioCadastroFragment)
-                    }
-
-                }
-                else {
+            .addSnapshotListener { querySnapshot, error ->
+                if (error != null){
                     Snackbar.make(
                         frameLayout4,
-                        "Lista de Usuários vazia!",
+                        error.message.toString(),
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
-            }
-            .addOnFailureListener {
-                Log.e("FirestoreIndex", it.message.toString())
-                Snackbar.make(
-                    frameLayout4,
-                    it.message.toString(),
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
-            .addOnCompleteListener {
+                else if (querySnapshot != null){
+                    var listaUsuarios = querySnapshot.toObjects(User::class.java)
+                    if (!listaUsuarios.isNullOrEmpty()) {
+                        listViewUsuariosLista.adapter =
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_list_item_1,
+                                listaUsuarios
+                            )
+                        listViewUsuariosLista.setOnItemClickListener { adapterView, view, i, l ->
+                            var user = listaUsuarios[i]
+                            usuarioViewModel.usuario = user
+                            findNavController().navigate(R.id.usuarioCadastroFragment)
+                        }
+
+                    }
+                    else {
+                        Snackbar.make(
+                            frameLayout4,
+                            "Lista de Usuários vazia!",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                }
                 progressBarUsuariosLista.visibility = View.GONE
             }
+/*            .addOnSuccessListener {
+//                var listaUsuarios = it.toObjects(User::class.java)
+//                if (!listaUsuarios.isNullOrEmpty()) {
+//                    listViewUsuariosLista.adapter =
+//                        ArrayAdapter(
+//                            requireContext(),
+//                            android.R.layout.simple_list_item_1,
+//                            it.toObjects(User::class.java)
+//                        )
+//                    listViewUsuariosLista.setOnItemClickListener { adapterView, view, i, l ->
+//                        var user = listaUsuarios[i]
+//                        usuarioViewModel.usuario = user
+//                        findNavController().navigate(R.id.usuarioCadastroFragment)
+//                    }
+//
+//                }
+//                else {
+//                    Snackbar.make(
+//                        frameLayout4,
+//                        "Lista de Usuários vazia!",
+//                        Snackbar.LENGTH_LONG
+//                    ).show()
+//                }
+//            }
+//            .addOnFailureListener {
+//                Log.e("FirestoreIndex", it.message.toString())
+//                Snackbar.make(
+//                    frameLayout4,
+//                    it.message.toString(),
+//                    Snackbar.LENGTH_LONG
+//                ).show()
+//            }
+//            .addOnCompleteListener {
+//                progressBarUsuariosLista.visibility = View.GONE
+//            }*/
     }
 
     /*
