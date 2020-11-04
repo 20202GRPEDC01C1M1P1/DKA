@@ -11,17 +11,13 @@ import androidx.navigation.fragment.findNavController
 import br.pro.aguiar.dka.R
 import br.pro.aguiar.dka.social.viewmodel.SocialViewModel
 import br.pro.aguiar.dka.social.viewmodel.SocialViewModelFactory
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.firestore.DocumentReference
-import kotlinx.android.synthetic.main.activity_social.*
 import kotlinx.android.synthetic.main.create_post_fragment.*
-import kotlinx.android.synthetic.main.dashboar_fragment.*
 import java.lang.Exception
 
 class CreatePostFragment : Fragment() {
 
-    private lateinit var viewModel: CreatePostViewModel
+    private lateinit var createPostViewModel: CreatePostViewModel
     private lateinit var socialViewModel: SocialViewModel
     private lateinit var socialViewModelFactory: SocialViewModelFactory
     private var postId: String? = null
@@ -44,15 +40,17 @@ class CreatePostFragment : Fragment() {
                 postId = post.id
                 editTextCreatePostTitulo.setText(post.titulo)
                 editTextCreatePostConteudo.setText(post.conteudo)
+                fabPostDelete.visibility = View.VISIBLE
+                fabPostDelete.isEnabled = true
             }
         }
-        viewModel = ViewModelProviders.of(this).get(CreatePostViewModel::class.java)
+        createPostViewModel = ViewModelProviders.of(this).get(CreatePostViewModel::class.java)
 
         fabPostSave.setOnClickListener {
             var titulo = editTextCreatePostTitulo.text.toString()
             var conteudo = editTextCreatePostConteudo.text.toString()
             if (postId == null) {
-                viewModel.store(
+                createPostViewModel.store(
                     titulo, conteudo)
                     .addOnCompleteListener {
                         actionCompleteListener(
@@ -61,7 +59,7 @@ class CreatePostFragment : Fragment() {
                             it.exception)
                     }
             } else {
-                viewModel.update(
+                createPostViewModel.update(
                     titulo, conteudo, postId!!)
                     .addOnCompleteListener {
                         actionCompleteListener(it.isSuccessful,
@@ -69,6 +67,17 @@ class CreatePostFragment : Fragment() {
                             it.exception)
                     }
             }
+        }
+        fabPostDelete.setOnClickListener {
+            createPostViewModel.delete(
+                postId!!)
+                .addOnCompleteListener {
+                    actionCompleteListener(
+                        it.isSuccessful,
+                        "Post excluido com sucesso.",
+                        it.exception
+                    )
+                }
         }
     }
 

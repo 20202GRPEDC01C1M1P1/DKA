@@ -31,4 +31,9 @@ class CreatePostViewModel : ViewModel() {
             var task = collection.document(postId).set(post)
             return task
     }
+
+    fun delete(postId: String): Task<Void> {
+        var task = collection.document(postId).delete()
+        return task
+    }
 }

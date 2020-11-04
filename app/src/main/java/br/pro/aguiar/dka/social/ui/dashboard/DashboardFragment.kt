@@ -33,16 +33,16 @@ class DashboardFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        fabAddPost.setOnClickListener {
-            findNavController().navigate(R.id.createPostFragment)
-        }
-
         activity?.let {
             socialViewModelFactory = SocialViewModelFactory()
             socialViewModel = ViewModelProvider(it, socialViewModelFactory)
                 .get(SocialViewModel::class.java)
         }
 
+        fabAddPost.setOnClickListener {
+            socialViewModel.post = null
+            findNavController().navigate(R.id.createPostFragment)
+        }
 
         viewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         viewModel.all()
