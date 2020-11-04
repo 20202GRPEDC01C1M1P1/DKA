@@ -3,14 +3,17 @@ package br.pro.aguiar.dka.social.model
 import com.google.firebase.firestore.DocumentId
 
 class Post (
-    var titulo: String,
-    var conteudo: String,
-    var autor: String,
+    var titulo: String? = null,
+    var conteudo: String? = null,
+    var autor: String? = null,
     var curtidas: Int = 0,
     @DocumentId var id: String? = null
 ) {
     fun getResumo() : String {
-        return if (conteudo.length <= 30) conteudo
-            else conteudo.substring(30) + "..."
+        if (conteudo != null)
+            return if (conteudo!!.length < 100) conteudo!!
+                else conteudo!!.substring(0,100) + "..."
+        else
+            return ""
     }
 }

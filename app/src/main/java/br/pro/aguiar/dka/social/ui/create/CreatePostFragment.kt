@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import br.pro.aguiar.dka.R
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_social.*
 import kotlinx.android.synthetic.main.create_post_fragment.*
 import kotlinx.android.synthetic.main.dashboar_fragment.*
 
@@ -50,7 +51,7 @@ class CreatePostFragment : Fragment() {
 
     private fun showSnackbar(msg: String) {
         Snackbar.make(
-            dashboard_root_element,
+            create_post_root_element,
             msg,
             Snackbar.LENGTH_LONG
         ).show()
