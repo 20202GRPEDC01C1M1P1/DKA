@@ -6,10 +6,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
 class DashboardViewModel : ViewModel() {
+
+    var db = FirebaseFirestore.getInstance()
+    var collection = db.collection("posts")
+
     fun all(): Task<QuerySnapshot> {
-        var db = FirebaseFirestore.getInstance()
-        var collection = db.collection("posts")
-        var task = collection.get()
+        var task = collection.limit(10).get()
         return task
     }
+
+    fun selectByTitle(titulo: String): Task<QuerySnapshot> {
+        var task = collection.whereEqualTo("titulo", titulo).get()
+        return task
+    }
+
 }

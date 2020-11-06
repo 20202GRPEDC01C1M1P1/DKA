@@ -9,8 +9,8 @@ import br.pro.aguiar.dka.social.model.Post
 import kotlinx.android.synthetic.main.adapter_post_recycler.view.*
 
 class PostRecyclerAdapter (
-    private var posts: List<Post>,
-    private var actionClick: (Post) -> Unit
+    private var posts: List<Post> //,
+    //private var actionClick: (Post) -> Unit
 ): RecyclerView.Adapter<PostRecyclerAdapter.PostViewHolder>() {
 
     class PostViewHolder(itemView: View)
@@ -37,9 +37,9 @@ class PostRecyclerAdapter (
         holder.textViewPostTitulo.text = post.titulo
         holder.textViewPostResumo.text = post.getResumo()
         holder.textViewPostCurtidas.text = post.curtidas.toString()
-        holder.itemView.setOnClickListener {
-            actionClick(post)
-        }
+//        holder.itemView.setOnClickListener {
+//            actionClick(post)
+//        }
     }
 
     override fun getItemCount(): Int = posts.size

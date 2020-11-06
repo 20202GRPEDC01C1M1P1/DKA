@@ -2,4 +2,6 @@
     <string name="app_name">DKA</string>
     <string name="hintFileName">Nome do Arquivo</string>
     <string name="btnValidateFile">Validar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

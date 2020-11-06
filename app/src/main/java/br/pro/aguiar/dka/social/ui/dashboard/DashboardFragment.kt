@@ -51,10 +51,7 @@ class DashboardFragment : Fragment() {
             .addOnSuccessListener {
                 val posts = it.toObjects(Post::class.java)
                 if (!posts.isNullOrEmpty()){
-                    var postRecyclerAdapter = PostRecyclerAdapter(posts) {
-//                        socialViewModel.post = it
-//                        findNavController().navigate(R.id.createPostFragment)
-                    }
+                    var postRecyclerAdapter = PostRecyclerAdapter(posts)
                     var itemTouchHelperDelete = ItemTouchHelper(
                         object : ItemTouchHelper.SimpleCallback(
                             0, ItemTouchHelper.LEFT
@@ -72,7 +69,7 @@ class DashboardFragment : Fragment() {
                                 val position = viewHolder.adapterPosition
                                 val post = posts[position]
                                 socialViewModel.post = post
-                                findNavController().navigate(R.id.createPostFragment)
+                                findNavController().navigate(R.id.infoPostFragment)
                             }
                         }
                     )
@@ -115,6 +112,74 @@ class DashboardFragment : Fragment() {
             }
 
 
+        btnBuscarPost.setOnClickListener {
+            var termoBusca = editTextTermoBusca.text.toString()
+            if (termoBusca.length > 3){
+                viewModel.selectByTitle(termoBusca)
+                    .addOnSuccessListener {
+                        val posts = it.toObjects(Post::class.java)
+                        if (!posts.isNullOrEmpty()){
+                            var postRecyclerAdapter = PostRecyclerAdapter(posts)
+                            var itemTouchHelperDelete = ItemTouchHelper(
+                                object : ItemTouchHelper.SimpleCallback(
+                                    0, ItemTouchHelper.LEFT
+                                ){
+                                    override fun onMove(
+                                        recyclerView: RecyclerView,
+                                        viewHolder: RecyclerView.ViewHolder,
+                                        target: RecyclerView.ViewHolder
+                                    ): Boolean = false
+
+                                    override fun onSwiped(
+                                        viewHolder: RecyclerView.ViewHolder,
+                                        direction: Int
+                                    ) {
+                                        val position = viewHolder.adapterPosition
+                                        val post = posts[position]
+                                        socialViewModel.post = post
+                                        findNavController().navigate(R.id.infoPostFragment)
+                                    }
+                                }
+                            )
+                            itemTouchHelperDelete.attachToRecyclerView(recyclerPosts)
+
+                            var itemTouchHelperShow = ItemTouchHelper(
+                                object : ItemTouchHelper.SimpleCallback(
+                                    0, ItemTouchHelper.RIGHT
+                                ){
+                                    override fun onMove(
+                                        recyclerView: RecyclerView,
+                                        viewHolder: RecyclerView.ViewHolder,
+                                        target: RecyclerView.ViewHolder
+                                    ): Boolean = false
+
+                                    override fun onSwiped(
+                                        viewHolder: RecyclerView.ViewHolder,
+                                        direction: Int
+                                    ) {
+                                        val position = viewHolder.adapterPosition
+                                        val post = posts[position]
+                                        socialViewModel.post = post
+                                        findNavController().navigate(R.id.createPostFragment)
+                                    }
+                                }
+                            )
+                            itemTouchHelperShow.attachToRecyclerView(recyclerPosts)
+
+                            recyclerPosts.adapter = postRecyclerAdapter
+                            recyclerPosts.layoutManager = LinearLayoutManager(requireContext())
+                        } else {
+                            showSnackbar("Nenhum Post encontrado.")
+                        }
+                    }
+                    .addOnFailureListener {
+                        showSnackbar(it.message.toString())
+                    }
+                    .addOnCompleteListener {
+                        // esconder o progressbar
+                    }
+            }
+        }
     }
 
     private fun showSnackbar(msg: String) {

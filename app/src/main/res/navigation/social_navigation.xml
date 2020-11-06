@@ -15,4 +15,8 @@
         android:name="br.pro.aguiar.dka.social.ui.create.CreatePostFragment"
         android:label="create_post_fragment"
         tools:layout="@layout/create_post_fragment" />
+    <fragment
+        android:id="@+id/infoPostFragment"
+        android:name="br.pro.aguiar.dka.social.ui.info.InfoPostFragment"
+        android:label="InfoPostFragment" />
 </navigation>
