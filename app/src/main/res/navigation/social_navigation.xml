@@ -19,4 +19,9 @@
         android:id="@+id/infoPostFragment"
         android:name="br.pro.aguiar.dka.social.ui.info.InfoPostFragment"
         android:label="InfoPostFragment" />
+    <fragment
+        android:id="@+id/comentarioPostFragment"
+        android:name="br.pro.aguiar.dka.social.ui.comentario.ComentarioPostFragment"
+        android:label="comentario_post_fragment"
+        tools:layout="@layout/comentario_post_fragment" />
 </navigation>

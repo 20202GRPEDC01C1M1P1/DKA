@@ -7,6 +7,7 @@ class Post (
     var conteudo: String? = null,
     var autor: String? = null,
     var curtidas: Int = 0,
+    var comentarios: List<Comentario>? = null,
     @DocumentId var id: String? = null
 ) {
     fun getResumo() : String {
