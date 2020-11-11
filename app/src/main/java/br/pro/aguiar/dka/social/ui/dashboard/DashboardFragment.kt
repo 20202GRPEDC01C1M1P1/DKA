@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -12,15 +13,19 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.pro.aguiar.dka.R
+import br.pro.aguiar.dka.model.User
 import br.pro.aguiar.dka.social.adapter.recycler.PostRecyclerAdapter
 import br.pro.aguiar.dka.social.model.Post
 import br.pro.aguiar.dka.social.viewmodel.SocialViewModel
 import br.pro.aguiar.dka.social.viewmodel.SocialViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.dashboar_fragment.*
 
 class DashboardFragment : Fragment() {
 
+    private var firebaseUser: FirebaseUser? = null
     private lateinit var viewModel: DashboardViewModel
     private lateinit var socialViewModel: SocialViewModel
     private lateinit var socialViewModelFactory: SocialViewModelFactory
@@ -111,6 +116,24 @@ class DashboardFragment : Fragment() {
                 // esconder o progressbar
             }
 
+        var firebaseAuth = FirebaseAuth.getInstance()
+
+        firebaseUser = firebaseAuth.currentUser
+        if (firebaseUser != null) {
+            viewModel.getUserInfo(firebaseUser!!.uid)
+                .addOnSuccessListener {
+                    var user = it.toObject(User::class.java)
+                    if (user != null)
+                        showSnackbar("Olá ${user?.name}")
+                    else
+                        showSnackbar("Olá, seja bem vindo(a).")
+                }
+                .addOnFailureListener {
+                    showSnackbar(it.message.toString())
+                }
+        } else {
+            activity?.finish()
+        }
 
         btnBuscarPost.setOnClickListener {
             var termoBusca = editTextTermoBusca.text.toString()
@@ -180,6 +203,12 @@ class DashboardFragment : Fragment() {
                     }
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
     }
 
     private fun showSnackbar(msg: String) {

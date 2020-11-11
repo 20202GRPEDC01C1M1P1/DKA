@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.pro.aguiar.dka.R
+import br.pro.aguiar.dka.model.User
 import br.pro.aguiar.dka.social.model.Comentario
 import br.pro.aguiar.dka.social.model.Post
 import br.pro.aguiar.dka.social.viewmodel.SocialViewModel
@@ -72,6 +73,15 @@ class InfoPostFragment : Fragment() {
                         }
                     }
                 }
+
+            infoPostViewModel.getAutor()
+                .addSnapshotListener { value, error ->
+                    if (error == null && value != null) {
+                        var user = value.toObject(User::class.java)
+                        textVIewInfoPostAutor.text = user?.name
+                    }
+                }
+
         } else
             findNavController().popBackStack()
 
@@ -86,7 +96,7 @@ class InfoPostFragment : Fragment() {
 
     private fun exibirDadosNoLayut(post: Post) {
         textVIewInfoPostTitulo.text = post?.titulo
-        textVIewInfoPostAutor.text = post?.autor
+        //textVIewInfoPostAutor.text = post?.autor
         textViewInfoPostConteudo.text = post?.conteudo
         textVIewInfoPostQuantidadeCurtida.text = post?.curtidas.toString()
     }
