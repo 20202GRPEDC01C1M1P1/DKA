@@ -46,36 +46,26 @@ class InfoPostFragment : Fragment() {
         infoPostViewModel = ViewModelProvider(this, infoPostViewModelFactory)
             .get(InfoPostViewModel::class.java)
 
+        infoPostViewModel.let {
+            it.post
+                .observe(viewLifecycleOwner) {
+                    exibirDadosNoLayut(post!!)
+                    addSnapshotListenerAutor(post!!.autor!!)
+                }
+            it.comentarios
+                .observe(viewLifecycleOwner) {
+                    listViewComentarios.adapter =
+                        ArrayAdapter(
+                            requireContext(),
+                            android.R.layout.simple_list_item_1,
+                            it
+                        )
+                }
+        }
+
         if (post != null && post!!.id != null){
             infoPostViewModel.get(post!!.id!!)
-                .addSnapshotListener { snapshot, error ->
-                    if (error != null){
-                        // emitir um erro
-                    } else if (snapshot != null && snapshot.exists()) {
-                        var post = snapshot.toObject(Post::class.java)
-                        if (post != null) {
-                            exibirDadosNoLayut(post!!)
-                            addSnapshotListenerAutor(post!!.autor!!)
-                        }
-                    }
-                }
             infoPostViewModel.getComentarios(post!!)
-                .addSnapshotListener { snapshot, error ->
-                    if (error != null){
-                        // emitir mensagem de erro
-                    } else if (snapshot != null){
-                        var comentarios = snapshot.toObjects(Comentario::class.java)
-                        if (!comentarios.isNullOrEmpty()){
-                            listViewComentarios.adapter =
-                                ArrayAdapter(
-                                    requireContext(),
-                                    android.R.layout.simple_list_item_1,
-                                    comentarios
-                                )
-                        }
-                    }
-                }
-
         } else
             findNavController().popBackStack()
 

@@ -1,5 +1,6 @@
 package br.pro.aguiar.dka.social.ui.dashboard
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
@@ -9,13 +10,21 @@ import com.google.firebase.firestore.QuerySnapshot
 
 class DashboardViewModel : ViewModel() {
 
+    var statusProgress = MutableLiveData<Boolean>()
     var db = FirebaseFirestore.getInstance()
     var collection = db.collection("posts")
+
+    init {
+        statusProgress.value = true
+    }
 
     fun all(): Task<QuerySnapshot> {
         var task = collection
             .orderBy("curtidas", Query.Direction.DESCENDING)
             .limit(10).get()
+        task.addOnCompleteListener {
+            statusProgress.value = false
+        }
         return task
     }
 

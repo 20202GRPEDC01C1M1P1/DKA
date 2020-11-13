@@ -52,6 +52,15 @@ class DashboardFragment : Fragment() {
         }
 
         viewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        viewModel
+            .statusProgress
+            .observe(viewLifecycleOwner){
+                if (it)
+                    progressBar.visibility = View.VISIBLE
+                else
+                    progressBar.visibility = View.GONE
+            }
+
         viewModel.all()
             .addOnSuccessListener {
                 val posts = it.toObjects(Post::class.java)
@@ -111,9 +120,6 @@ class DashboardFragment : Fragment() {
             }
             .addOnFailureListener {
                 showSnackbar(it.message.toString())
-            }
-            .addOnCompleteListener {
-                // esconder o progressbar
             }
 
         var firebaseAuth = FirebaseAuth.getInstance()
