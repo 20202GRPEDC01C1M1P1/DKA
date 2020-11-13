@@ -11,21 +11,24 @@ class CadastroViewModel : ViewModel() {
     fun createUser(email: String, senha: String): Task<AuthResult> {
 
         var firebaseAuth = FirebaseAuth.getInstance()
-        var task = firebaseAuth.createUserWithEmailAndPassword(email, senha)
+        var task = firebaseAuth
+            .createUserWithEmailAndPassword(email, senha)
 
         return task
     }
 
     fun storeUserInfo(
-        nome: String,
-        uid: String
+        uid: String,
+        nome: String, dataNacimento: String, cidade: String
     ): Task<Void> {
         var firebaseFirestore = FirebaseFirestore.getInstance()
         var collection = firebaseFirestore.collection("users")
         var document = collection.document(uid)
         var task = document.set(
             mapOf(
-                "name" to nome
+                "name" to nome,
+                "burn" to dataNacimento,
+                "city" to cidade,
             )
         )
         return task

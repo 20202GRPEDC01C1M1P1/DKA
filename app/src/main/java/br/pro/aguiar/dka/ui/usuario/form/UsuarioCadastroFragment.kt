@@ -37,30 +37,31 @@ class UsuarioCadastroFragment : Fragment() {
         }
         viewModel = ViewModelProviders.of(this)
             .get(UsuarioCadastroViewModel::class.java)
-        btnUsuarioCadastrar.setOnClickListener {
-            var user = User(
-                editTextUsuarioCadastroNome.text.toString(),
-                editTextUsuarioCadastroIdade.text.toString().toInt(),
-                editTextUsuarioCadastroAnoNascimento.text.toString().toInt(),
-                editTextUsuarioCadastroEmail.text.toString()
-            )
-            viewModel.store(user)
-                .addOnSuccessListener {
-                    Snackbar.make(
-                        root_view_usuario_cadastro,
-                        "Cadastro realizado com sucesso.",
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                    findNavController().popBackStack()
-                }
-                .addOnFailureListener {
-                    Snackbar.make(
-                        root_view_usuario_cadastro,
-                        it.message.toString(),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-        }
+//        btnUsuarioCadastrar.setOnClickListener {
+//            var user = User(
+//                editTextUsuarioCadastroNome.text.toString(),
+//                editTextUsuarioCadastroIdade.text.toString().toInt(),
+//                editTextUsuarioCadastroAnoNascimento.text.toString(),
+//                "cidade",
+//                editTextUsuarioCadastroEmail.text.toString()
+//            )
+//            viewModel.store(user)
+//                .addOnSuccessListener {
+//                    Snackbar.make(
+//                        root_view_usuario_cadastro,
+//                        "Cadastro realizado com sucesso.",
+//                        Snackbar.LENGTH_LONG
+//                    ).show()
+//                    findNavController().popBackStack()
+//                }
+//                .addOnFailureListener {
+//                    Snackbar.make(
+//                        root_view_usuario_cadastro,
+//                        it.message.toString(),
+//                        Snackbar.LENGTH_LONG
+//                    ).show()
+//                }
+//        }
         btnUsuarioExcluir.setOnClickListener {
             viewModel
                 .delete(usuarioViewModel.usuario!!)

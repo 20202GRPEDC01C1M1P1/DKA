@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -41,7 +42,33 @@ class ComentarioPostFragment : Fragment() {
             post = socialViewModel.post
         }
 
-        viewModel = ViewModelProviders.of(this).get(ComentarioPostViewModel::class.java)
+        viewModel = ViewModelProviders
+                        .of(this)
+                        .get(ComentarioPostViewModel::class.java)
+
+        viewModel.let {
+            it.nomeUsuario
+                .observe(viewLifecycleOwner) {
+                editTextComentarioAutor.setText(it)
+            }
+
+            it.persistencia
+                .observe(viewLifecycleOwner) {
+                if (it)
+                    findNavController().popBackStack()
+            }
+
+            it.mensagem
+                .observe(viewLifecycleOwner) {
+                    Toast.makeText(
+                        requireContext(),
+                        it,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        }
+
+
 
         btnComentarioSalvar.setOnClickListener {
             var autor = editTextComentarioAutor.text.toString()
@@ -49,13 +76,7 @@ class ComentarioPostFragment : Fragment() {
 
             if (post != null && post!!.id != null){
                 viewModel.store(
-                    autor, conteudo, post!!.id!!)
-                    .addOnSuccessListener {
-                       findNavController().popBackStack()
-                    }
-                    .addOnFailureListener {
-                        Log.e("Comentário", it.message.toString())
-                    }
+                    conteudo, post!!.id!!)
             }
         }
     }

@@ -36,10 +36,10 @@ class InfoPostViewModel: ViewModel() {
         return collection.document(post.id!!).collection("comentarios")
     }
 
-    fun getAutor(): DocumentReference {
-        var uid = FirebaseAuth.getInstance().uid
+    fun getAutor(uid: String): DocumentReference {
+        //var uid = FirebaseAuth.getInstance().uid
         var collection = db.collection("users")
-        var document = collection.document(uid!!)
+        var document = collection.document(uid)
         return document
     }
 }

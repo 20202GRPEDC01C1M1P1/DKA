@@ -15,6 +15,7 @@ class CreatePostViewModel : ViewModel() {
         titulo: String,
         conteudo: String
     ): Task<DocumentReference> {
+//        FirebaseAuth.getInstance().currentUser?.
         var post = Post(
             titulo, conteudo, FirebaseAuth.getInstance().currentUser?.uid
         )

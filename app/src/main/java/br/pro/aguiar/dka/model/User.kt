@@ -5,7 +5,8 @@ import com.google.firebase.firestore.DocumentId
 class User (
     var name: String? = null,
     var age: Int? = null,
-    var burn: Int? = null,
+    var burn: String? = null,
+    var city: String? = null,
     @DocumentId var id: String? = null
 ) {
     override fun toString(): String {

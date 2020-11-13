@@ -53,8 +53,10 @@ class InfoPostFragment : Fragment() {
                         // emitir um erro
                     } else if (snapshot != null && snapshot.exists()) {
                         var post = snapshot.toObject(Post::class.java)
-                        if (post != null)
+                        if (post != null) {
                             exibirDadosNoLayut(post!!)
+                            addSnapshotListenerAutor(post!!.autor!!)
+                        }
                     }
                 }
             infoPostViewModel.getComentarios(post!!)
@@ -74,14 +76,6 @@ class InfoPostFragment : Fragment() {
                     }
                 }
 
-            infoPostViewModel.getAutor()
-                .addSnapshotListener { value, error ->
-                    if (error == null && value != null) {
-                        var user = value.toObject(User::class.java)
-                        textVIewInfoPostAutor.text = user?.name
-                    }
-                }
-
         } else
             findNavController().popBackStack()
 
@@ -94,9 +88,18 @@ class InfoPostFragment : Fragment() {
         }
     }
 
+    private fun addSnapshotListenerAutor(uid: String) {
+        infoPostViewModel.getAutor(uid)
+            .addSnapshotListener { value, error ->
+                if (error == null && value != null) {
+                    var user = value.toObject(User::class.java)
+                    textVIewInfoPostAutor.text = user?.name
+                }
+            }
+    }
+
     private fun exibirDadosNoLayut(post: Post) {
         textVIewInfoPostTitulo.text = post?.titulo
-        //textVIewInfoPostAutor.text = post?.autor
         textViewInfoPostConteudo.text = post?.conteudo
         textVIewInfoPostQuantidadeCurtida.text = post?.curtidas.toString()
     }

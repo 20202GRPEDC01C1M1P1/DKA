@@ -29,6 +29,8 @@ class CadastroFragment : Fragment() {
 
         btnCadastroSalvar.setOnClickListener {
             var nome = editTextCadastroNome.text.toString()
+            var dataNascimento = editTextCadastroDataNascimento.text.toString()
+            var cidade = editTextCadastroCidade.text.toString()
             var email = editTextCadastroEmail.text.toString()
             var senha = editTextCadastroSenha.text.toString()
             var reSenha = editTextCadastroReSenha.text.toString()
@@ -38,7 +40,10 @@ class CadastroFragment : Fragment() {
                 var task = viewModel.createUser(email, senha)
                 task
                     .addOnSuccessListener {
-                        viewModel.storeUserInfo(nome, it.user!!.uid)
+                        viewModel.storeUserInfo(
+                            it.user!!.uid,
+                            nome, dataNascimento, cidade
+                        )
                             .addOnSuccessListener {
                                 Toast.makeText(
                                     requireContext(),
