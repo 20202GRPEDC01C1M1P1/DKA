@@ -7,5 +7,5 @@ import retrofit2.http.GET
 interface CardsService {
 
     @GET("v1/cards")
-    fun all(): Call<Cards>
+    suspend fun all(): Cards
 }
