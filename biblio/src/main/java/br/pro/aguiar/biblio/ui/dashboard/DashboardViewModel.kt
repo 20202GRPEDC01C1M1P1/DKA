@@ -27,4 +27,16 @@ class DashboardViewModel : ViewModel() {
             }
         }
     }
+
+    fun excluirLivro(livro: Livro) {
+        _msg.value = "Livro de ID: ${livro.id}, em processo de exclusão."
+        viewModelScope.launch {
+            try {
+                val id = livro.delete()
+                _msg.value = "Livro de ID: $id, excluido com sucesso."
+            } catch (e: Exception) {
+                _msg.value = e.message
+            }
+        }
+    }
 }

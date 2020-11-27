@@ -14,8 +14,8 @@ interface LivroService {
     @POST("api/livros")
     suspend fun store(@Body livro: Livro) : Livro
 
-    @PUT("api/livros")
-    suspend fun update(@Body livro: Livro) : Livro
+    @PUT("api/livros/{id}")
+    suspend fun update(@Path("id") id: Int, @Body livro: Livro) : Livro
 
     @DELETE("api/livros/{id}")
     suspend fun delete(@Path("id") id: Int) : Int
