@@ -12,23 +12,21 @@ import kotlin.Exception
 class HomeViewModel : ViewModel() {
 
     private val _livros = MutableLiveData<List<Livro>>()
-    val livros: LiveData<List<Livro>>
-        get() = _livros
-
     private val _status = MutableLiveData<Boolean>()
-    val status: LiveData<Boolean>
-        get() = _status
-
     private val _msg = MutableLiveData<String>()
-    val msg: LiveData<String>
-        get() = _msg
+
+    val livros: LiveData<List<Livro>>  = _livros
+    val status: LiveData<Boolean>  = _status
+    val msg: LiveData<String> = _msg
+
 
     init {
         _status.value = false
         _msg.value = null
         viewModelScope.launch {
             try {
-                _livros.value = ApiClient.getLivroService().all()
+                _livros.value = ApiClient.getLivroService().all() //List<Livro>
+                // Temperaturas.listTemp
             } catch (e: Exception) {
                 _msg.value = e.message
             }
