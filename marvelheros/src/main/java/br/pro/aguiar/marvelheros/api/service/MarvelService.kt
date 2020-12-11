@@ -8,8 +8,10 @@ import retrofit2.http.Query
 
 interface MarvelService {
 
-    @GET("/v1/public/characters?=asdasd&ts=2323&hash=asdasd")
-    suspend fun all(@Query("ts") ts: Int = 1,
+    @GET("/v1/public/characters")
+    suspend fun all(@Query("offset") offiset: Int = 0,
+                    //@Query("limit") limit: Int = 20,
+                    @Query("ts") ts: Int = 1,
                     @Query("hash") hash: String = "cdf95a0a2b31b263acadfc08529be623",
                     @Query("apikey") apikey: String = "cf58b8d0b024f8fdd3230a4e51075e92"
                     ) : MarvelResponse

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.pro.aguiar.marvelheros.R
 import br.pro.aguiar.marvelheros.adapter.HerosRecyclerAdapter
+import br.pro.aguiar.marvelheros.model.MarvelCharacters
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.list_heros_fragment.*
 
@@ -27,23 +28,38 @@ class ListHerosFragment : Fragment() {
         val view = inflater.inflate(R.layout.list_heros_fragment, container, false)
         listHerosViewModel = ViewModelProvider(this).get(ListHerosViewModel::class.java)
         listHerosViewModel.let {
-            it.msg.observe(viewLifecycleOwner) { msg ->
-                if (!msg.isNullOrBlank())
-                    showSnackbar(msg)
+            it.msg.observe(viewLifecycleOwner) { msg -> showSnackbar(msg) }
+            it.heros.observe(viewLifecycleOwner) { heros -> setupRecycerView(heros) }
+            it.totalHeros.observe(viewLifecycleOwner) { totalHeros ->
+                textViewListHerosTotal.text = totalHeros.toString()
             }
-            it.heros.observe(viewLifecycleOwner) { heros ->
-                recyclerViewListHeros.adapter = HerosRecyclerAdapter(heros)
-                recyclerViewListHeros.layoutManager = LinearLayoutManager(requireContext())
+            it.countHeros.observe(viewLifecycleOwner) { countHeros ->
+                textViewListHerosCount.text = countHeros.toString()
             }
         }
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fabListHerosPre.setOnClickListener {
+            listHerosViewModel.getHerosPre()
+        }
+        fabListHerosPro.setOnClickListener {
+            listHerosViewModel.getHerosPro()
+        }
+    }
+
+    private fun setupRecycerView(heros: List<MarvelCharacters>) {
+        recyclerViewListHeros.adapter = HerosRecyclerAdapter(heros)
+        recyclerViewListHeros.layoutManager = LinearLayoutManager(requireContext())
+    }
     private fun showSnackbar(msg: String) {
-        Snackbar.make(
-            root_list_heros_layout,
-            msg, Snackbar.LENGTH_LONG
-        ).show()
+        if (!msg.isNullOrBlank())
+            Snackbar.make(
+                root_list_heros_layout,
+                msg, Snackbar.LENGTH_LONG
+            ).show()
     }
 
 }
